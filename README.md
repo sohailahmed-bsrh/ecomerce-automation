@@ -12,9 +12,12 @@
 
 <p>
   <a href="#overview">Overview</a> &bull;
+  <a href="#purpose--problem-statement">Purpose</a> &bull;
+  <a href="#real-world-industry-applications">Use Cases</a> &bull;
+  <a href="#step-by-step-engineering-walkthrough">How It Was Built</a> &bull;
   <a href="#system-architecture">Architecture</a> &bull;
   <a href="#visual-showcase-gallery">Visual Gallery</a> &bull;
-  <a href="#core-capabilities">Capabilities</a> &bull;
+  <a href="#technology-stack-matrix">Tech Stack</a> &bull;
   <a href="#installation--setup">Installation</a> &bull;
   <a href="#author--contact-information">Author</a>
 </p>
@@ -25,6 +28,58 @@
 ## Overview
 
 E-Commerce Automation is an enterprise workflow platform that coordinates product catalog management, order fulfillment, supplier price updates, and customer notification workflows across multiple online sales channels.
+
+---
+
+## Purpose & Problem Statement
+
+### The Problem
+Growing e-commerce operations often run on fragmented tools: inventory is updated manually, order tracking is sent by hand, and pricing changes across multiple marketplaces lag behind supplier cost fluctuations. These operational bottlenecks lead to stockouts, delayed fulfillment, and lost profit margins.
+
+### The Engineering Purpose
+To build a centralized, event-driven e-commerce automation hub that synchronizes supplier inventory feeds, manages order dispatch states, updates dynamic pricing rules, and triggers automated WhatsApp customer notifications upon fulfillment.
+
+---
+
+## Real-World Industry Applications
+
+- **Multi-Channel Retail Operations**: Unifying order and inventory tracking across Shopify, WooCommerce, and custom web stores.
+- **Automated Drop-Ship Logistics**: Routing customer orders to suppliers and returning tracking numbers automatically.
+- **Dynamic Pricing Platforms**: Continuously adjusting retail prices based on currency fluctuations and supplier wholesale updates.
+- **Customer Care & Notification Automation**: Automated dispatch updates via WhatsApp Business API reducing inbound customer support tickets.
+
+---
+
+## Step-by-Step Engineering Walkthrough (How It Was Built)
+
+### Step 1: Centralized Relational Schema & Migration Pipeline
+The database layer (`backend/db.js`, `backend/migrations/`) implements relational schemas for products, variants, customer profiles, order fulfillment states, and communication logs.
+
+### Step 2: Multi-Channel Order Ingestion Engine
+The order module (`backend/modules/api/orders.js`) provides webhook endpoints that ingest customer orders from sales channels in real time. Orders are validated, assigned sequential internal tracking IDs, and staged for fulfillment.
+
+### Step 3: Automated Supplier Catalog & Inventory Sync
+The product module (`backend/modules/api/products.js`) polls supplier feeds. If supplier inventory changes, local stock levels and marketplace listings are updated within seconds to eliminate out-of-stock purchases.
+
+### Step 4: WhatsApp Notification Agent
+An automated messaging worker (`backend/modules/whatsapp/agent.js`) listens for order state transitions (Confirmed, Packed, In-Transit, Delivered). Upon status changes, it formats personalized customer messages and delivers them via WhatsApp.
+
+### Step 5: Enterprise Analytics & Management Dashboard
+The React frontend (`frontend/`) visualizes order velocities, regional fulfillment statistics, revenue margins, and webhook latency metrics in real time.
+
+---
+
+## System Architecture
+
+```mermaid
+flowchart TD
+    A[Supplier Feeds / Product Ingestion] --> B[Data Normalization & Deduplication]
+    B --> C[Inventory & Price Update Engine]
+    C --> D[Multi-Channel Marketplace API Sync]
+    D --> E[Inbound Customer Orders]
+    E --> F[Automated Order Routing & Fulfillment]
+    F --> G[WhatsApp Dispatch Notifications & Invoice Logging]
+```
 
 ---
 
@@ -83,27 +138,14 @@ E-Commerce Automation is an enterprise workflow platform that coordinates produc
 
 ---
 
-## System Architecture
+## Technology Stack Matrix
 
-```mermaid
-flowchart TD
-    A[Supplier Feeds / Product Ingestion] --> B[Data Normalization & Deduplication]
-    B --> C[Inventory & Price Update Engine]
-    C --> D[Multi-Channel Marketplace API Sync]
-    D --> E[Inbound Customer Orders]
-    E --> F[Automated Order Routing & Fulfillment]
-    F --> G[Dispatch Notifications & Invoice Logging]
-```
-
----
-
-## Technology Stack
-
-| Domain | Technologies |
-| :--- | :--- |
-| Frontend | React, Vite, Tailwind CSS, Lucide Icons |
-| Backend API | Node.js, Express, TypeScript |
-| Database | PostgreSQL / MySQL |
+| Domain | Technologies | Version / Role | Engineering Purpose |
+| :--- | :--- | :--- | :--- |
+| Backend Server | Node.js, Express | 20.x / 4.19+ | REST API gateway, order state machine, and sync scheduler |
+| Messaging Gateway | WhatsApp Business API Integration | Cloud API | Programmatic delivery of dispatch notifications and tracking links |
+| Frontend UI | React, Vite, Tailwind CSS | 18.2 / 5.0+ | Real-time merchant control console and order management |
+| Relational Storage | SQLite / PostgreSQL | Latest | Persistent catalog index and fulfillment audit logs |
 
 ---
 
